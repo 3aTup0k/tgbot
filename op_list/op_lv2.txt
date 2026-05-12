@@ -4,3 +4,5 @@ mute
 dmute
 unban
 unmute
+addnote
+delnote

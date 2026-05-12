@@ -5,3 +5,5 @@ dmute
 unban
 unmute
 clear
+addnote
+delnote

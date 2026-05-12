@@ -194,8 +194,8 @@ def load_op_rules():
     if not OP_FILES_DIR.exists():
         OP_FILES_DIR.mkdir()
         (OP_FILES_DIR / 'op_lv1.txt').write_text('ban\nmute\nunban\nunmute', encoding='utf-8')
-        (OP_FILES_DIR / 'op_lv2.txt').write_text('ban\ndban\nmute\ndmute\nunban\nunmute', encoding='utf-8')
-        (OP_FILES_DIR / 'op_lv3.txt').write_text('ban\ndban\nmute\ndmute\nunban\nunmute\nclear', encoding='utf-8')
+        (OP_FILES_DIR / 'op_lv2.txt').write_text('ban\ndban\nmute\ndmute\nunban\nunmute\naddnote\ndelnote', encoding='utf-8')
+        (OP_FILES_DIR / 'op_lv3.txt').write_text('ban\ndban\nmute\ndmute\nunban\nunmute\nclear\naddnote\ndelnote', encoding='utf-8')
     for f in sorted(OP_FILES_DIR.iterdir()):
         m = re.match(r'op_lv(\d+)\.txt', f.name)
         if m:
@@ -742,6 +742,8 @@ async def notes_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 async def addnote_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    if not is_admin(update) and not user_has_op(update.effective_user.id, 'addnote'):
+        return
     reply = update.message.reply_to_message
     if not reply:
         await update.message.reply_text('Ответь на сообщение, чтобы сохранить его как заметку.')
@@ -780,6 +782,8 @@ async def addnote_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 async def delnote_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    if not is_admin(update) and not user_has_op(update.effective_user.id, 'delnote'):
+        return
     if not context.args:
         await update.message.reply_text('Укажи #хештег или номер.')
         return
